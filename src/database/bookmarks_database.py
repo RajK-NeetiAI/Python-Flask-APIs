@@ -31,13 +31,7 @@ def get_bookmarks(user_id: int) -> list[Bookmark]:
         bookmarks = session.scalars(statement).all()
         formated_bookmarks = []
         for bm in bookmarks:
-            formated_bookmarks.append({
-                'url': bm.url,
-                'remarks': bm.remarks,
-                'visits': bm.visits,
-                'shorten_url': bm.shorten_url,
-                'id': bm.id
-            })
+            formated_bookmarks.append(bm._asdict())
         return formated_bookmarks
 
 
@@ -47,13 +41,7 @@ def get_bookmark_by_id(id: int, user_id: int) -> Bookmark | None:
             id=id, user_id=user_id, is_deleted=False)
         bookmark = session.scalars(statement).one_or_none()
         if bookmark:
-            return {
-                'url': bookmark.url,
-                'remarks': bookmark.remarks,
-                'visits': bookmark.visits,
-                'shorten_url': bookmark.shorten_url,
-                'id': bookmark.id
-            }
+            return bookmark._asdict()
         else:
             return None
 
@@ -77,12 +65,6 @@ def get_bookmark_by_shorten_url(shorten_url: str, user_id: int) -> dict | None:
             shorten_url=shorten_url, is_deleted=False, user_id=user_id)
         bookmark = session.scalars(statement).one_or_none()
         if bookmark:
-            return {
-                'url': bookmark.url,
-                'remarks': bookmark.remarks,
-                'visits': bookmark.visits,
-                'shorten_url': bookmark.shorten_url,
-                'id': bookmark.id
-            }
+            return bookmark._asdict()
         else:
             return None
